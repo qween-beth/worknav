@@ -10,4 +10,7 @@ flask_marshmallow
 marshmallow-sqlalchemy
 mysql
 mysql-connector
+gunicorn
+flash
+email-validator
 
