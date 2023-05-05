@@ -1,0 +1,27 @@
+
+
+<!-- Navigation-->
+<nav class="navbar navbar-expand-lg navbar-light" id="mainNav">
+    <div class="container px-4 px-lg-5">
+        <a class="navbar-brand brand-color" href="{{url_for('index') }}">WorkCation Finder</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            Menu
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ms-auto py-4 py-lg-0">
+                {% if current_user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{url_for('dashboard') }}"> Home </a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="#"> Add WorkSpace </a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{url_for('new_review') }}"> New Review </a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{url_for('logout') }}"> Logout </a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{url_for('index') }}"> Home </a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{url_for('login2') }}"> Add Workspace </a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{url_for('login2') }}"> Login </a></li>
+                <li class="nav-item"><a class="nav-link px-lg-3 py-3 py-lg-4" href="{{url_for('register2') }}"> Register </a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

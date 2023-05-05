@@ -1,0 +1,35 @@
+{% extends 'layouts/layout.html' %}  
+
+{% block content %}
+<head><link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  </head>
+<body>
+
+  <div class="container about-container">
+    <h1>About WorkCation Finder</h1>
+    <div class="about-images">
+        <div class="about-image">
+          <img src="{{ url_for('static', filename='img/workspace4.jpg') }}" alt="About Image 1" height="140">
+        </div>
+        <div class="about-image">
+            <img src="{{ url_for('static', filename='img/workspace1.jpg') }}" alt="About Image 2" height="140">
+          </div>
+        <div class="about-image">
+            <img src="{{ url_for('static', filename='img/workspace3.jpg') }}" alt="About Image 3" height="140">
+          </div>
+      </div>
+    <p>
+      WorkCation Finder is an online platform that helps people find great workspaces in times of <strong>internet and electricity disruptions</strong>. Our mission is to make it easy for people to find the perfect workspace for their needs, whether they're looking for a quiet place to work or a collaborative environment to meet new people and get inspired.
+    </p>
+    <p>
+      We understand that finding the right workspace can be a challenge, especially with so many options available today. That's why we've created a platform that makes it easy to browse and <strong>discover different workspaces, read reviews from other users, and book the perfect space for your needs</strong>.
+    </p>
+    <p>
+      We're passionate about creating a community of like-minded professionals who value creativity, collaboration, and productivity. Our team is dedicated to improving the way people work, and we're always looking for new ways to help our users get the most out of their workday.
+    </p>
+  </div>
+{% endblock %}
+
+</body>
+
+
