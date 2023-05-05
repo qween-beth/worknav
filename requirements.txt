@@ -13,4 +13,5 @@ mysql-connector
 gunicorn
 flash
 email-validator
+matplotlib
 
