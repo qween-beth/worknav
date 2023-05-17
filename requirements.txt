@@ -16,3 +16,4 @@ email-validator
 matplotlib
 flask_mail
 requests
+googlemaps
