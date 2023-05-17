@@ -1,0 +1,17 @@
+# add your project requirements here, be sure to pin the versions
+pytest==7.2.2
+flask_sqlalchemy
+flask_bcrypt
+flask_login
+flask_cors
+Pillow
+flask_wtf
+flask_marshmallow
+marshmallow-sqlalchemy
+mysql
+mysql-connector
+gunicorn
+flash
+email-validator
+matplotlib
+
