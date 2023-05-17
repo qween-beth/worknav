@@ -1,0 +1,84 @@
+{% extends "layouts/layout.html" %}
+
+{% block content %}
+
+
+<style>
+   #mapid { 
+     height: 400px;
+     max-width: 100%;
+   }
+</style>
+
+ <div class="content-section">
+   <h3>See workspaces near you!</h3>
+   <div id="mapid" style="height: 800px; width: 1000px;"></div>
+   <script>
+    var marker = null
+    var myAPIKey = '5964526efb1248479d2af5c09c0711a1';
+        var mymap = L.map('mapid').setView([-26.2041, 28.0473], 3);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+            maxZoom: 18,
+        }).addTo(mymap);
+        // Add Geoapify Address Search control
+        const addressSearchControl = L.control.addressSearch(myAPIKey, {
+            position: 'topright',
+            resultCallback: (address) => {
+            if (marker) {
+                marker.remove();
+            }
+
+            if (!address) {
+                return;
+            }
+
+            marker = L.marker([address.lat, address.lon]).addTo(mymap);
+            if (address.bbox && address.bbox.lat1 !== address.bbox.lat2 && address.bbox.lon1 !== address.bbox.lon2) {
+                mymap.fitBounds([[address.bbox.lat1, address.bbox.lon1], [address.bbox.lat2, address.bbox.lon2]], { padding: [100, 100] })
+            } else {
+                mymap.setView([address.lat, address.lon], 20);
+            }
+            },
+            suggestionsCallback: (suggestions) => {
+            console.log(suggestions);
+            }
+        });
+        mymap.addControl(addressSearchControl);
+
+    // var mymap = L.map('mapid').setView([-26.2041, 28.0473], 3);
+    // L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    //     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+    //     maxZoom: 18,
+    // }).addTo(mymap);
+
+    function updateMap() {
+        fetch('/data')  // Make a GET request to /data route
+            .then(response => response.json())  // Convert response to JSON
+            .then(data => {
+                // Loop through data and add markers to the map
+                data.forEach(item => {
+                    L.marker([item[11], item[12]]).addTo(mymap).bindPopup(`
+                    <div class="popup-container">
+                        <p><strong>Address:</strong> ${item[8]}</p>
+                        <p><strong>Workspace Name:</strong> ${item[1]}</p>
+                        <p><strong>Workspace Type:</strong> ${item[2]}</p>
+                        <p><strong>Internet Availability:</strong> ${item[3]}</p>
+                        <p><strong>Electricity:</strong> ${item[4]}</p>
+                        <p><strong>Cost:</strong> ${item[5]}</p>
+                    </div>
+                    `);
+                });
+            })
+            .catch(error => console.error(error));
+    }
+                 
+    // Call the updateMap function to initially populate the map
+    updateMap();
+    // Call updateMap function every 30 seconds
+    setInterval(updateMap, 30000);
+</script>
+</div>
+
+
+{% endblock %}

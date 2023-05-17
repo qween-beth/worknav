@@ -1,20 +1,24 @@
 import os
+import datetime
+import requests
 import sqlite3
 import secrets
-import matplotlib.pyplot as plt
-import io
-import pybase64
-from PIL import Image
-from flask import request, flash, redirect, url_for,\
-    render_template, session, get_flashed_messages, abort
-from backend_frontend.forms import RegistrationForm, LoginForm,\
-    UpdateAccountForm, ReviewForm
-from backend_frontend.models import User, Workspace, Review
-from flask_login import LoginManager, login_user, UserMixin,\
-    current_user, login_required, logout_user
-from backend_frontend import app, db, bcrypt, login_manager
-import mysql.connector
 import googlemaps
+from PIL import Image
+import mysql.connector
+from flask_mail import Message
+from flask_login import (LoginManager, login_user, UserMixin,
+                        current_user, login_required, logout_user)
+from flask import (request, flash, redirect, url_for,
+                  render_template, render_template_string,
+                  session, get_flashed_messages, abort,
+                  jsonify, current_app)
+from backend_frontend.forms import (RegistrationForm, LoginForm,
+                                    UpdateAccountForm, ReviewForm,
+                                    BookingForm, RequestResetForm,
+                                    ResetPasswordForm)
+from backend_frontend import app, db, mail, bcrypt, login_manager
+from backend_frontend.models import User, Workspace, Review, Booking
 
 
 # Google Maps API key
@@ -154,8 +158,15 @@ def search():
 def search_database(location, workspace_type, budget):
     if location is None:
         return []
+    
+     # get the path to the instance folder of the Flask app
+    #instance_path = current_app.instance_path
+
+    # join the instance path with the name of the database file
+    #db_path = os.path.join(instance_path, 'workcation_finder.db')
+
     # connect to the database
-    conn = sqlite3.connect('workcation_finder.db')
+    conn = sqlite3.connect('instance/workcation_finder.db')
     # create a cursor object
     c = conn.cursor()
     if budget == 'free':
@@ -196,8 +207,6 @@ def new_review():
         return redirect(url_for('dashboard'))
     return render_template('create_review.html', title='New Review',
                            form=form, legend='Share your Workspace experience with others!')
-
-
 
 
 
@@ -247,7 +256,7 @@ def delete_review(review_id):
     db.session.delete(review)
     db.session.commit()
     flash('Your review has been deleted!', 'success')
-    return redirect(url_for('home'))
+    return redirect(url_for('dashboard'))
 
 
 # user's total review endpoint
@@ -276,41 +285,199 @@ def save_picture(form_picture):
     return picture_fn
 
 
-# Define the route that displays the dashboard
-#@app.route('/analytics')
-#def analytics():
-    # Query the SQLite database to fetch the required data for the analytics
-    # You can use SQLAlchemy or the built-in Python sqlite3 library
-    # Here's an example using sqlite3
+# Booking template
+# HTML template for the table message sent to workspace admin
+TABLE_TEMPLATE = """
+<table>
+  <tr>
+    <th>Workspace</th>
+    <td>{{ booking.workspace_name }}</td>
+  </tr>
+  <tr>
+    <th>Email</th>
+    <td>{{ booking.email }}</td>
+  </tr>
+  <tr>
+    <th>Phone</th>
+    <td>{{ booking.phone }}</td>
+  </tr>
+  <tr>
+    <th>Date</th>
+    <td>{{ booking.booking_date }}</td>
+  </tr>
+  <tr>
+    <th>Time</th>
+    <td>{{ booking.booking_time }}</td>
+  </tr>
+  <tr>
+    <th>Team Size</th>
+    <td>{{ booking.team_size }}</td>
+  </tr>
+</table>
+"""
+# Booking endpoint
+@app.route('/book_workspace', methods=['GET', 'POST'])
+@login_required
+def book_workspace():
+    form = BookingForm()
+    if form.validate_on_submit():
+        booking = Booking(
+            workspace_name=form.workspace_name.data,
+            username=current_user.username,
+            email=form.email.data,
+            phone=form.phone.data,
+            booking_date=form.booking_date.data,
+            booking_time=form.booking_time.data,
+            team_size=form.team_size.data
+        )
+        db.session.add(booking)
+        db.session.commit()
+        
+        # Render the table template with the booking data
+        table_html = render_template_string(TABLE_TEMPLATE, booking=booking)
+        # Send email to the admin
+        message_admin = Message('New Booking Request',
+                          recipients=['jasperobed@gmail.com'])
+        message_admin.html = f"""
+        <h2>New booking request from {current_user.username}:</h2>
+        {table_html}
+        """
+        mail.send(message_admin)
+
+        # Send email to the user
+        message_user = Message('Your Booking Request',
+                               recipients=[form.email.data])
+        message_user.html = f"""
+        <h2>Your booking request at {form.workspace_name.data}:</h2>
+        {table_html}
+        """
+        mail.send(message_user)
+        
+        flash('Workspace booked successfully! Workspace admin will contact you.', 'success')
+        return redirect(url_for('dashboard'))
     
+    return render_template('book_workspace.html', title='Book Workspace', form=form)
 
+# --------------------------------------------
+## JV additional routes
+## Route to add a workspace page
+@app.route('/add_workspace')
+@login_required
+def add_workspace():
+    return render_template('add_workspace.html')
 
+## Route to add new workspace data to workspace table in db
+@app.route('/submit_workspace', methods=['POST'])
+@login_required
+def submit_workspace():
+    workspace_name = request.form['workspace_name']
+    workspace_type = request.form['workspace_type']
+    internet = request.form['internet']
+    electricity = request.form['electricity']
+    cost = request.form['cost']
+    opening_time_str = request.form['opening_time']
+    opening_time = datetime.datetime.strptime(opening_time_str, '%H:%M').time()
+    closing_time_str = request.form['closing_time']
+    closing_time = datetime.datetime.strptime(closing_time_str, '%H:%M').time()
+    address = request.form['address']
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    response = requests.get(f'https://api.geoapify.com/v1/geocode/search?text={address}&apiKey=5964526efb1248479d2af5c09c0711a1')
+    if response.status_code == 200:
+        result = response.json()
+        if result['features']:
+            latitude = result['features'][0]['properties']['lat']
+            longitude = result['features'][0]['properties']['lon']
+        else:
+            return 'Address not found', 400
+    else:
+        return 'Error while processing the address', 500
+    user_id = current_user.id # provides id of user who submitted the workspace
     
+    workspace = Workspace(workspace_name=workspace_name,
+                          workspace_type=workspace_type,
+                          internet=internet,
+                          electricity=electricity,
+                          cost=cost,
+                          opening_time=opening_time,
+                          closing_time=closing_time,
+                          address=address,
+                          latitude=latitude,
+                          longitude=longitude,
+                          user_id=user_id)
+    db.session.add(workspace)
+    db.session.commit()
+    flash('Workspace added successfully!', 'success')
+    return redirect(url_for('dashboard'))
 
 
+## Route to render map
+@app.route('/static_map')
+@login_required
+def static_map():
+    return render_template('static_map.html')
+
+## Route to obtain data from db to show pins on map
+basedir = os.path.abspath(os.path.dirname(__file__))
+@app.route('/data', methods=['POST', 'GET'])
+@login_required
+def get_data():
+     # get the path to the instance folder of the Flask app
+    instance_path = current_app.instance_path
+
+    # join the instance path with the name of the database file
+    db_path = os.path.join(instance_path, 'workcation_finder.db')
+
+    # connect to the database
+    conn = sqlite3.connect(db_path)
+    #conn = sqlite3.connect('instance/workcation_finder.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM workspace')
+    data = cursor.fetchall()
+    conn.close()
+    return jsonify(data)
+
+# Reset email function
+def send_reset_email(user):
+    token = user.get_reset_token()
+    reset_url = url_for('reset_token', token=token, _external=True)
+    user_msg = Message('Password Reset Request',
+                  recipients=[user.email])
+    user_msg.body = f'''To reset your password, visit the following link:
+{reset_url}
+
+If you did not make this request then simply ignore this email and no changes will be made.
+'''
+    mail.send(user_msg)
 
 
+# Password request endpoint
+@app.route("/reset_password", methods=['GET', 'POST'])
+def reset_request():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash('An email has been sent with instructions to reset your password.', 'info')
+        return redirect(url_for('login2'))
+    return render_template('reset_request.html', title='Reset Password', form=form)
 
 
-
-
-
-
+# Reset password token endpoint
+@app.route("/reset_password/<token>", methods=['GET', 'POST'])
+def reset_token(token):
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+    user = User.verify_reset_token(token)
+    if user is None:
+        flash('That is an invalid or expired token', 'warning')
+        return redirect(url_for('reset_request'))
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+        user.password = hashed_password
+        db.session.commit()
+        flash('Your password has been updated! You are now able to log in', 'success')
+        return redirect(url_for('login2'))
+    return render_template('reset_token.html', title='Reset Password', form=form)

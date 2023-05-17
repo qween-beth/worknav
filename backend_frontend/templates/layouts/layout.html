@@ -18,44 +18,22 @@
     {% else %}
         <title>WorkCation Finder </title>
     {% endif %}
+    <!-- NEW -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+    crossorigin=""/>
+
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+    integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+    crossorigin=""></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.css" />
+    <script src="https://unpkg.com/@geoapify/leaflet-address-search-plugin@^1/dist/L.Control.GeoapifyAddressSearch.min.js"></script>
     
 </head>
 {% include 'nav.html' %} 
+
 <body>
-    <!-- <header class="site-header">
-      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
-        <div class="container">
-          <a class="navbar-brand mr-4" href="#">WorkCation Finder </a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarToggle">
-            {% if current_user.is_authenticated %}
-            <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="{{ url_for('dashboard')}}">Home</a>
-              <a class="nav-item nav-link" href="{{ url_for('new_review') }}">New Review</a>
-            </div>
-            <div class="navbar-nav">
-                <a class="nav-item nav-link" href="{{ url_for('account')}}" class="btn btn-primary" >Profile</a>
-                <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
-              {% else %}
-              <div class="navbar-nav mr-auto">
-                <a class="nav-item nav-link" href="{{ url_for('index')}}">Home</a>
-                <a class="nav-item nav-link" href="{{ url_for('login2')}}">Add WorkSpace</a>
-              </div>
-              <div class="navbar-nav">
-              <a class="nav-item nav-link" href="{{ url_for('login2')}}">Login</a>
-              <a class="nav-item nav-link" href="{{ url_for('register2')}}">Register</a>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-      </nav>
-    </header>-->
-
-  
-
-
     <main role="main" class="container">
       <div class="row">
         <div class="col-md-8">
@@ -76,10 +54,10 @@
             <h3>Quick Links </h3>
             <p class='text-muted'>Information on the GO!
               <ul class="list-group">
-                <li class="list-group-item list-group-item-light">Latest Workspaces </li>
-                <li class="list-group-item list-group-item-light"><a href="#" class="btn btn-success">Add Workspace </a></li>
+                <li class="list-group-item list-group-item-light"><a href="{{ url_for('add_workspace') }}" class="btn btn-success">Add Workspace </a></li>
                 <li class="list-group-item list-group-item-light"><a href="{{ url_for('search') }}" class="btn btn-success">Search Workspaces </a></li>
                 <li class="list-group-item list-group-item-light"><a href="{{ url_for('see_reviews') }}" class="btn btn-success">Read others Review</a></li>
+                <li class="list-group-item list-group-item-light"><a href="{{ url_for('static_map') }}" class="btn btn-success">Map</a></li>
               </ul>
             </p>
           </div>

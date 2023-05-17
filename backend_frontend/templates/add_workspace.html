@@ -1,0 +1,130 @@
+{% extends "layouts/layout.html" %}
+
+{% block content %}
+    <br>
+    <br>
+    <br>
+    <div class="content-section" style="width: 100%; height: 320px; margin: 0 auto;">
+      <h3> Submit Workspace Information</h3>
+      <form method="POST" action="submit_workspace">
+        <div class="row">
+          <div class="col">
+            <label for="address">Address:</label>
+            <input type="text" id="address" name="address">
+              <div id="address-dropdown"></div>
+              <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                  const addressField = document.getElementById('address');
+                  const dropdownContainer = document.getElementById('address-dropdown');
+            
+                  addressField.addEventListener('input', () => {
+                    const addressValue = addressField.value;
+                    const apiUrl = `https://api.geoapify.com/v1/geocode/autocomplete?text=${addressValue}&apiKey=5964526efb1248479d2af5c09c0711a1`;
+                    
+                    const requestOptions = {
+                      method: 'GET',
+                    };
+                    fetch(apiUrl, requestOptions)
+                      .then(response => response.json())
+                      .then(result => {
+                        // Clear existing dropdown suggestions
+                        dropdownContainer.innerHTML = '';
+            
+                        // Create and populate the dropdown with top 3 suggestions
+                        const suggestions = result.features.slice(0, 3);
+                        const dropdown = document.createElement('ul');
+                        suggestions.forEach(suggestion => {
+                          const dropdownItem = document.createElement('li');
+                          dropdownItem.textContent = suggestion.properties.formatted;
+                          dropdownItem.addEventListener('click', () => {
+                            addressField.value = suggestion.properties.formatted;
+                            dropdownContainer.innerHTML = '';
+                          });
+                          dropdown.appendChild(dropdownItem);
+                        });
+            
+                        // Add the dropdown to the container
+                        dropdownContainer.appendChild(dropdown);
+                      })
+                      .catch(error => console.log('error', error));
+                  });
+                });
+              </script>
+          </div>
+          <div class="col">
+            <label for="workspace_name">Workspace Name:</label>
+            <input type="text" id="workspace_name" name="workspace_name">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <label for="workspace_type">Workspace Type:</label>
+            <select id="workspace_type" name="workspace_type">
+              <option value="">Select an option</option>
+              <option value="Cafe">Cafe</option>
+              <option value="Library">Library</option>
+              <option value="Co-working space">Co-working space</option>
+              <option value="Remote">Remote</option>
+              <option value="Shopping Centre">Shopping Centre</option>
+              <option value="Office Building">Office Building</option>
+              <option value="Restaurant">Restaurant</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="internet">Internet:</label>
+            <select id="internet" name="internet">
+              <option value="">Select an option</option>
+              <option value="stable">Stable</option>
+              <option value="fluctuating">Fluctuating</option>
+              <option value="disruptive">Disruptive</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <label for="cost">Cost:</label>
+            <select id="cost" name="cost">
+              <option value="">Select an option</option>
+              <option value="paid">Paid</option>
+              <option value="free">Free</option>
+            </select>
+          </div>
+          <div class="col">
+            <label for="electricity">Electricity:</label>
+            <select id="electricity" name="electricity">
+              <option value="">Select an option</option>
+              <option value="stable">Stable</option>
+              <option value="fluctuating">Fluctuating</option>
+              <option value="disruptive">Disruptive</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <label for="closing_time">Opening Time:</label>
+            <select id="opening_time" name="opening_time">
+              {% for hour in range(0, 24) %}
+                {% for minute in ['00', '30'] %}
+                  <option value="{{ '%02d:%s' % (hour, minute) }}">{{ '%02d:%s %s' % ((hour-1)%12+1, minute, 'PM' if hour>=12 else 'AM') }}</option>
+                {% endfor %}
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col">
+            <label for="closing_time">Closing Time:</label>
+            <select id="closing_time" name="closing_time">
+              {% for hour in range(0, 24) %}
+                {% for minute in ['00', '30'] %}
+                  <option value="{{ '%02d:%s' % (hour, minute) }}">{{ '%02d:%s %s' % ((hour-1)%12+1, minute, 'PM' if hour>=12 else 'AM') }}</option>
+                {% endfor %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class="text-center">
+          <button type="submit" class="btn btn-primary" style="background-color: #5f788a;">Submit</button>
+        </div>
+      </form>
+    </div>
+{% endblock %}

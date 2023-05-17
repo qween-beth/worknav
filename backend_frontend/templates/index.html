@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
   <head>
-    <title> WorkCation</title>
+    <title> WorkCation Finder </title>
 
     <style>
     .custom-card {
@@ -32,28 +32,90 @@
 
     </style>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+<link href="static/css/styles.css" rel="stylesheet" />
+<!-- Bootstrap CSS -->
+<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+<!-- jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   </head>
-{% include 'nav.html' %}  
+{% include 'nav.html' %}
 
 <body>
   <div class="container-fluid p-0" style="background-image: url('static/img/parallax.jpg'); height: 600px;">
     <div class="row h-100 align-items-center justify-content-center text-center">
       <div class="col-md-10 col-lg-8 col-xl-7">
-        <h1 class="display-4 text-white mb-2">Get Conducive WorkSpaces In 3mins</h1>
-        <p class="lead mb-5 text-white">Choose from a network of 100+ work hubs across Nigeria & South Africa.</p>
-        <a href="{{ url_for('search') }}" class="btn btn-success btn-radius btn-brd">Search for WorkSpaces</a>
+        <h1 class="display-4 text-white mb-2">Get Conducive WorkSpaces In < 3mins</h1>
+        <p class="lead mb-5 text-white">Choose from a network of 250+ work hubs across Nigeria & South Africa.</p>
+        <a data-scroll href="{{url_for('search') }}" class="btn btn-success btn-radius grd1 btn-brd" style="font-size: 1.5em; border-radius: 50px;">Search WorkSpaces</a>
+        <a data-scroll href="{{url_for('login2') }}" class="btn btn-success btn-radius grd1 btn-brd" style="font-size: 1.5em; border-radius: 50px; background-color: yellowgreen;">Add WorkSpace</a>
+  
       </div>
     </div>
   </div>
-   
-             <!-- <section> 
-                    <div class="container" style="background-image: url('static/img/whatwedo2.jpg')">
-                      <br><br><br><br><br><br>
-                      <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+  <section class="py-5 text-center ">
+    <div class="container">
+      <h2 class="pb-2 py-1 text-center" style="color: yellowgreen;">What We Do </h2>  
+      <div id="myCarousel" class="carousel slide" data-ride="carousel">
+        <!-- Indicators -->
+        <ol class="carousel-indicators">
+          <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+          <li data-target="#myCarousel" data-slide-to="1"></li>
+          <li data-target="#myCarousel" data-slide-to="2"></li>
+          <li data-target="#myCarousel" data-slide-to="3"></li>
+          <li data-target="#myCarousel" data-slide-to="4"></li>
+          <li data-target="#myCarousel" data-slide-to="5"></li>
+        </ol>
+    
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner">
+          <div class="item active">
+            <img src="static/img/workcationfinder1.png" alt="workcationfinder" style="width:100%;">
+          </div>
+
+        <div class="item">
+          <img src="static/img/workcationfinder2.png" alt="workcationfinder" style="width:100%;">
+        </div>
+
+        <div class="item">
+          <img src="static/img/workcationfinder3.png" alt="workcationfinder" style="width:100%;">
+        </div>
+        
+        <div class="item">
+          <img src="static/img/workcationfinder4.png" alt="workcationfinder" style="width:100%;">
+        </div>
+
+        <div class="item">
+          <img src="static/img/workcationfinder5.png" alt="workcationfinder" style="width:100%;">
+        </div>
+
+        <div class="item">
+          <img src="static/img/workcationfinder6.png" alt="workcationfinder" style="width:100%;">
+        </div>
+      </div> 
+
+        <!-- Left and right controls -->
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+          <span class="sr-only">Previous</span>
+        </a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+          <span class="sr-only">Next</span>
+        </a>
+      </div>
+    </div>
+</section>
+<hr>
+<section class="py-5 text-center "> 
+                    <div class="container" style="background-image: url('/img/whatwedo2.jpg')">
+                      <h2 class="pb-2 py-1 text-center" style="color: yellowgreen;">About </h2>
                       <div class="row">
                         <div class="col-md-4">
                           <div class="thumbnail">
-                          <h3 style="color: yellowgreen;"><strong>What is WorkCation Finder?</strong></h3><br>
+                          <h3>What is WorkCation Finder?</h3><br>
                           <p> WorkCation Finder is an online platform that helps people find great workspaces 
                             in times of internet and electricity disruptions. Our mission is to make it easy 
                             for people to find the perfect workspace for their needs, whether they're looking 
@@ -70,274 +132,136 @@
                       </div>
                       <div class="col-md-4">
                         <div class="thumbnail">
-                        <h3 style="color: yellowgreen;"><strong>Benefits of Workspaces?</strong></h3><br>
+                        <h3>Benefits of Workspaces?</h3><br>
                         <p> Recent surveys and research suggests people are more productive and creative
                           when working from a shared workspace. With reduced distractions, a collective mindset,
                           and preferred on-site amenities all contributing to a collaborative work space, workers
                           can typically work better and enjoy their work more in a coworking environment than other
                           working arrangements.<br><br>
-
                           Smaller businesses and independent professionals find coworking provides affordable office space
                           with important work necessities like high-speed internet, printers, and meeting rooms, resulting 
                           in lower startup costs.
                         </p>
-                        <div class="card">
-                          <div class="card-body d-flex flex-column align-items-center">
-                            <p><a href="{{url_for('about') }}" class="btn btn-primary" style="background-color: rgb(74, 107, 9);">Read More!</a></p>
-                          </div>
-                        </div>
                     </div>
                   </div>
                     <div class="col-md-4">
                       <div class="thumbnail">
-                      <h3 style="color: yellowgreen;"><strong>Why WorkCation Finder?</strong></h3><br>
+                      <h3>Why WorkCation Finder?</h3><br>
                       <p> We understand that finding the right workspace can be a challenge, especially with so many
                         options available today. That's why we've created a platform that makes it easy to browse 
                         and discover different workspaces, read reviews from other users, and book the perfect space
-                        for your needs.<br><br>
-                
-                        WorkCation Finder list workspaces and outline what features and amenities
+                        for your needs.WorkCation Finder list workspaces and outline what features and amenities
                         these spaces offer. Professionals and companies can then compare all the available 
-                        workspaces to find one that has the services and amenities that fit their requirements.
+                        workspaces to find one that has the services and amenities that fit their requirements.<br><br>
 
                         Once you’ve found the workspace that is best for you, you can enquire about booking,
-                        schedule a tour, and reserve your space.<br><br>
-
+                        schedule a tour, and reserve your space.
                         We're passionate about creating a community of like-minded professionals who value creativity,
                         collaboration, and productivity.
                       </p>
                     </div>
                   </div>
                 </div>
-              </div>     
+                        <a href="/search" class="btn btn-success" style="font-size: 1.2em; border-radius: 50px;">Browse WorkSpaces</a>
+                        <a href="#" class="btn btn-secondary" style="font-size: 1.2em; border-radius: 50px;">Add WorkSpace</a>
+                        
               </section>
-              <hr> -->
-              <section class="py-5 text-center ">
-                <div class="row py-lg-5">
-                  <div class="col-lg-10 col-md-8 mx-auto">
-                    
-                    <h2 style="color: yellowgreen;"><strong>Why WorkCation Finder?</strong></h2><br>
-                      <p> We understand that finding the right workspace can be a challenge, especially with so many
-                        options available today. That's why we've created a platform that makes it easy to browse 
-                        and discover different workspaces, read reviews from other users, and book the perfect space
-                        for your needs.<br>
+              <hr>
 
-                        We're passionate about creating a community of like-minded professionals who value creativity,
-                        collaboration, and productivity.
-                      </p>
-                      <a href="#" class="btn btn-success my-2">Browse Spaces</a>
-                      <a href="#" class="btn btn-secondary my-2">Add Space</a>
-                    </p>
-                  </div>
-                </div>
-             
-                       
-    <div class="container px-4 py-1" id="custom-cards" style= "margin-top:2px;">
-                <h2 class="pb-2 py-1 text-center ">Top WorkCation Cities</h2>
-                <p>We have beautiful and conducive workspaces located in the following cities.</p>
-              
-                <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
-                  <div class="col">
-                    <a href="static/img/port-eliz.jpg" target="_blank" class="custom-card">
-                      <img src="static/img/port-eliz.jpg" alt="Cape Town" style="width:100%; height:250px;">
-              
-                    </a>
-                    </br>
-                    <div class="card-body">
-                      <h5 class="card-title mb-3 mt-3">Port Elizabeth, South Africa</h5>
-                      <span class="badge bg-success">20 workspace</span>
-                      <span class="badge bg-warning text-dark">10 Libraries</span>
-                      <span class="badge bg-danger">10 Cafes</span>
-                    </div>
-                  </div>
-              
-                  <div class="col">
-                    <a href="/static/img/abuja.jpg" target="_blank" class="custom-card">
-                      <img src="static/img/abuja.jpg" alt="Cape Town" style="width:100%; height:250px;">
-                      
-                    </a>
-                    <div class="card-body">
-                      <h5 class="card-title mb-3 mt-3">Abuja, Nigeria</h5>
-                      <span class="badge bg-success">20 workspace</span>
-                      <span class="badge bg-warning text-dark">10 Libraries</span>
-                      <span class="badge bg-danger">10 Cafes</span>
-                    </div>
-                  </div>
-              
-                  <div class="col">
-                    <a href="/static/img/capetown.jpg" target="_blank" class="custom-card">
-                      <img src="static/img/capetown.jpg" alt="Cape Town" style="width:100%; height:250px;">
-                      
-                    </a>
-                    <div class="card-body">
-                      <h5 class="card-title mb-3 mt-3">Cape Town, South Africa</h5>
-                      <span class="badge bg-success">20 workspace</span>
-                      <span class="badge bg-warning text-dark">10 Libraries</span>
-                      <span class="badge bg-danger">10 Cafes</span>
-                    </div>
-                  </div>
-              
-                  
-                  
-
-                  <div class="col mt-5">
-                    <a href="/static/img/lagos.jpg" target="_blank" class="custom-card">
-                      <img src="static/img/lagos.jpg" alt="Cape Town" style="width:100%; height:250px;">
-              
-                    </a>
-                    </br>
-                    <div class="card-body">
-                      <h5 class="card-title mb-3 mt-3">Lagos, Nigeria</h5>
-                      <span class="badge bg-success">20 workspace</span>
-                      <span class="badge bg-warning text-dark">10 Libraries</span>
-                      <span class="badge bg-danger">10 Cafes</span>
-                    </div>
-                  </div>
-              
-                  <div class="col mt-5">
-                    <a href="/static/img/Johannesburg.jpg" target="_blank" class="custom-card">
-                      <img src="static/img/Johannesburg.jpg" alt="Cape Town" style="width:100%; height:250px;">
-                      
-                    </a>
-                    <div class="card-body">
-                      <h5 class="card-title mb-3 mt-3">Johannesburg, South Africa</h5>
-                      <span class="badge bg-success">20 workspace</span>
-                      <span class="badge bg-warning text-dark">10 Libraries</span>
-                      <span class="badge bg-danger">10 Cafes</span>
-                    </div>
-                  </div>
-              
-                  <div class="col mt-5">
-                    <a href="/static/img/portharcourt.jpg" target="_blank" class="custom-card">
-                      <img src="static/img/portharcourt.jpg" alt="Cape Town" style="width:100%; height:250px;">
-                      
-                    </a>
-                    <div class="card-body">
-                      <h5 class="card-title mb-3 mt-3">Portharcourt, Nigeria</h5>
-                      <span class="badge bg-success">20 workspace</span>
-                      <span class="badge bg-warning text-dark">10 Libraries</span>
-                      <span class="badge bg-danger">10 Cafes</span>
-
-                    </div>
-                  </div>
-              
-              
-              </div>
-            </section>            
-              
-            <!--
-              <section>
-                  <div class="container">
-                      <h2>What Users are saying</h2>
-                        <p>include Users review Here</p>
-                  </div>
-              </section>
-
-              <section>
-                <div class="container">
-                    <h2>Who We Are </h2>
-                    <p>Put in details of our company's mission and vision statement or anything valuable.</p>
-                </div>
-            </section>
-
-              <section>
-                <div class="container">
-                    <h2>Simple use of WorkCation Finder in 4 steps !</h2>
-                    <p>We can have 4 steps about how to use our app. Register/Login, Click on Search for a workspace, Enter the name of your preferred city, Click on search, finally let us know your experience. </p>
-                </div>
-            </section>
-            -->
-            <!-- Divider-->
-            
-            <!-- <div class="container-fluid mt-5" > 
-              <div class="row">
-               
-              </div>
-              <div class="row" style="background-color: #f9fbfc;">
-                <h3>Info-Stat</h3>
-                <div class="col-md-12">
-                  <div id="info-carousel" class="carousel slide" data-ride="carousel" data-wrap="true">
-                    <div class="carousel-inner">
-                      <div class="carousel-item active">
-                        <div class="row">
-                          <div class="col-md-2">
-                            <div class="card" style="background-color: rgb(162, 199, 211);">
-                              <div class="card-body">
-                                <h5 class="card-title">Registered Users</h5>
-                                <p class="card-text">&nbsp515+</p>
-                              </div>
+              <section class="py-5 text-center ">   
+                  <div class="container px-4 py-1" id="custom-cards" style= "margin-top:2px;">
+                              <h2 class="pb-2 py-1 text-center" style="color: yellowgreen;">Top WorkCation Cities</h2>
+                              <h5>We have beautiful and conducive workspaces located in the following cities.</h5>
+                            
+                              <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+                                <div class="col">
+                                  <a href="static/img/port-eliz.jpg" target="_blank" class="custom-card">
+                                    <img src="static/img/port-eliz.jpg" alt="porteliz" style="width:100%; height:250px;">
+                            
+                                  </a>
+                                  </br>
+                                  <div class="card-body">
+                                    <h5 class="card-title mb-3 mt-3">Port Elizabeth, South Africa</h5>
+                                    <span class="badge bg-success">34 Workspaces</span>
+                                    <span class="badge bg-warning text-dark">10 Libraries</span>
+                                    <span class="badge bg-danger">15 Cafes</span>
+                                  </div>
+                                </div>
+                            
+                                <div class="col">
+                                  <a href="/static/img/abuja.jpg" target="_blank" class="custom-card">
+                                    <img src="static/img/abuja.jpg" alt="abuja" style="width:100%; height:250px;">
+                                    
+                                  </a>
+                                  <div class="card-body">
+                                    <h5 class="card-title mb-3 mt-3">Abuja, Nigeria</h5>
+                                    <span class="badge bg-success">42 Workspaces</span>
+                                    <span class="badge bg-warning text-dark">7 Libraries</span>
+                                    <span class="badge bg-danger">18 Cafes</span>
+                                  </div>
+                                </div>
+                            
+                                <div class="col">
+                                  <a href="/static/img/capetown.jpg" target="_blank" class="custom-card">
+                                    <img src="static/img/capetown.jpg" alt="Cape Town" style="width:100%; height:250px;">
+                                    
+                                  </a>
+                                  <div class="card-body">
+                                    <h5 class="card-title mb-3 mt-3">Cape Town, South Africa</h5>
+                                    <span class="badge bg-success">20 Workspaces</span>
+                                    <span class="badge bg-warning text-dark">10 Libraries</span>
+                                    <span class="badge bg-danger">20 Cafes</span>
+                                  </div>
+                                </div>
+                            
+                                <div class="col mt-5">
+                                  <a href="/static/img/lagos.jpg" target="_blank" class="custom-card">
+                                    <img src="static/img/lagos.jpg" alt="lagos" style="width:100%; height:250px;">
+                            
+                                  </a>
+                                  </br>
+                                  <div class="card-body">
+                                    <h5 class="card-title mb-3 mt-3">Lagos, Nigeria</h5>
+                                    <span class="badge bg-success">58 Workspaces</span>
+                                    <span class="badge bg-warning text-dark">32 Libraries</span>
+                                    <span class="badge bg-danger">30 Cafes</span>
+                                  </div>
+                                </div>
+                            
+                                <div class="col mt-5">
+                                  <a href="/static/img/Johannesburg.jpg" target="_blank" class="custom-card">
+                                    <img src="static/img/Johannesburg.jpg" alt="Johannesburg" style="width:100%; height:250px;">
+                                    
+                                  </a>
+                                  <div class="card-body">
+                                    <h5 class="card-title mb-3 mt-3">Johannesburg, South Africa</h5>
+                                    <span class="badge bg-success">60 Workspaces</span>
+                                    <span class="badge bg-warning text-dark">15 Libraries</span>
+                                    <span class="badge bg-danger">23 Cafes</span>
+                                  </div>
+                                </div>
+                            
+                                <div class="col mt-5">
+                                  <a href="/static/img/portharcourt.jpg" target="_blank" class="custom-card">
+                                    <img src="static/img/portharcourt.jpg" alt="Portharcourt" style="width:100%; height:250px;">
+                                    
+                                  </a>
+                                  <div class="card-body">
+                                    <h5 class="card-title mb-3 mt-3">Portharcourt, Nigeria</h5>
+                                    <span class="badge bg-success">34 Workspaces</span>
+                                    <span class="badge bg-warning text-dark">15 Libraries</span>
+                                    <span class="badge bg-danger">15 Cafes</span>
+                                  </div>
+                                </div>
                             </div>
-                          </div>
-                          <div class="col-md-2">
-                            <div class="card" style="background-color: rgb(110, 196, 138);">
-                              <div class="card-body">
-                                <h5 class="card-title">Total WorkSpaces</h5>
-                                <p class="card-text">&nbsp125+</p>
-                              </div>
+                          </section> 
+                          <section class="py-5 text-center" style="color: yellowgreen;">
+                            <h2>Watch Us On Youtube </h2>
+                            <div class="embed-responsive embed-responsive-16by9">
+                              <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/Z6aOkQWtn4w"></iframe>
                             </div>
-                          </div>
-                          <div class="col-md-2">
-                            <div class="card" style="background-color: rgb(162, 199, 211);">
-                              <div class="card-body">
-                                <h5 class="card-title">Popular Workspace</h5>
-                                <p class="card-text">Witpoortjie Library, S/A </p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-2">
-                            <div class="card" style="background-color: rgb(162, 199, 211);">
-                              <div class="card-body">
-                                <h5 class="card-title">New Users Today</h5>
-                                <p class="card-text">&nbsp5</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-2">
-                            <div class="card" style="background-color: rgb(110, 196, 138);">
-                              <div class="card-body">
-                                <h5 class="card-title">Available WorkSpaces</h5>
-                                <p class="card-text">&nbsp25</p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="col-md-2">
-                            <div class="card" style="background-color: rgb(162, 199, 211);">
-                              <div class="card-body">
-                                <h5 class="card-title">New WorkSpace</h5>
-                                <p class="card-text">Cape Town Library, S/A </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-          </body>            
-           <!-- <script>
-              $(document).ready(function() {
-                $('.carousel').carousel({
-                  wrap: true
-                });
-                setInterval(function() {
-                  $('.carousel-item').each(function() {
-                    var $this = $(this);
-                    var pos = $this.position();
-                    var width = $this.outerWidth();
-                    if (pos.left + width < 0) {
-                      var $firstSlide = $this.parent().find('.carousel-item:first');
-                      $this.after($firstSlide);
-                      $this = $firstSlide;
-                    }
-                    $this.animate({
-                      left: '-=2'
-                    }, 100);
-                  });
-                });
-              });
-            </script> -->
-{% include 'footer.html' %}              
-</html>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+                          </section>                       
+                          
+              {% include 'footer.html' %}              
+              </html>
+              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
