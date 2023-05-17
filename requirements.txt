@@ -14,4 +14,4 @@ gunicorn
 flash
 email-validator
 matplotlib
-
+flask_mail
